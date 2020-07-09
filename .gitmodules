@@ -1,0 +1,3 @@
+[submodule "traccar-web"]
+	path = traccar-web
+	url = https://github.com/ravithb/traccar-web.git
