@@ -41,6 +41,7 @@ import org.traccar.handler.CopyAttributesHandler;
 import org.traccar.handler.DistanceHandler;
 import org.traccar.handler.EngineHoursHandler;
 import org.traccar.handler.FilterHandler;
+import org.traccar.handler.FirebaseDataHandler;
 import org.traccar.handler.GeocoderHandler;
 import org.traccar.handler.GeolocationHandler;
 import org.traccar.handler.HemisphereHandler;
@@ -138,7 +139,8 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
                 EngineHoursHandler.class,
                 ComputedAttributesHandler.class,
                 WebDataHandler.class,
-                DefaultDataHandler.class);
+                DefaultDataHandler.class,
+                FirebaseDataHandler.class);
 
         if (eventsEnabled) {
             addHandlers(

@@ -15,9 +15,14 @@
  */
 package org.traccar;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr353.JSR353Module;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Properties;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.ext.ContextResolver;
+
 import org.apache.velocity.app.VelocityEngine;
 import org.eclipse.jetty.util.URIUtil;
 import org.slf4j.Logger;
@@ -31,6 +36,7 @@ import org.traccar.database.ConnectionManager;
 import org.traccar.database.DataManager;
 import org.traccar.database.DeviceManager;
 import org.traccar.database.DriversManager;
+import org.traccar.database.FirebaseRTDBManager;
 import org.traccar.database.GeofenceManager;
 import org.traccar.database.GroupsManager;
 import org.traccar.database.IdentityManager;
@@ -63,12 +69,9 @@ import org.traccar.sms.SmsManager;
 import org.traccar.sms.smpp.SmppClient;
 import org.traccar.web.WebServer;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.ext.ContextResolver;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Properties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr353.JSR353Module;
 
 public final class Context {
 
@@ -99,6 +102,12 @@ public final class Context {
 
     public static DataManager getDataManager() {
         return dataManager;
+    }
+
+    private static FirebaseRTDBManager firebaseDataManager;
+
+    public static FirebaseRTDBManager getFirebaseDataManager() {
+        return firebaseDataManager;
     }
 
     private static LdapProvider ldapProvider;
@@ -290,6 +299,10 @@ public final class Context {
 
         if (config.hasKey("database.url")) {
             dataManager = new DataManager(config);
+        }
+
+        if (config.hasKey("firebase.service.account.keyfile")) {
+            firebaseDataManager = new FirebaseRTDBManager(config);
         }
 
         if (config.getBoolean("ldap.enable")) {

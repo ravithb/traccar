@@ -15,16 +15,16 @@
  */
 package org.traccar;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import javax.annotation.Nullable;
+import javax.ws.rs.client.Client;
+
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.database.AttributesManager;
 import org.traccar.database.CalendarManager;
 import org.traccar.database.DataManager;
 import org.traccar.database.DeviceManager;
+import org.traccar.database.FirebaseRTDBManager;
 import org.traccar.database.GeofenceManager;
 import org.traccar.database.IdentityManager;
 import org.traccar.database.MaintenancesManager;
@@ -56,6 +56,7 @@ import org.traccar.handler.DefaultDataHandler;
 import org.traccar.handler.DistanceHandler;
 import org.traccar.handler.EngineHoursHandler;
 import org.traccar.handler.FilterHandler;
+import org.traccar.handler.FirebaseDataHandler;
 import org.traccar.handler.GeocoderHandler;
 import org.traccar.handler.GeolocationHandler;
 import org.traccar.handler.HemisphereHandler;
@@ -73,8 +74,11 @@ import org.traccar.handler.events.MotionEventHandler;
 import org.traccar.handler.events.OverspeedEventHandler;
 import org.traccar.reports.model.TripsConfig;
 
-import javax.annotation.Nullable;
-import javax.ws.rs.client.Client;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+
 import io.netty.util.Timer;
 
 public class MainModule extends AbstractModule {
@@ -92,6 +96,11 @@ public class MainModule extends AbstractModule {
     @Provides
     public static DataManager provideDataManager() {
         return Context.getDataManager();
+    }
+
+    @Provides
+    public static FirebaseRTDBManager provideFirebaseDataManager() {
+        return Context.getFirebaseDataManager();
     }
 
     @Provides
@@ -322,6 +331,13 @@ public class MainModule extends AbstractModule {
             return new DefaultDataHandler(dataManager);
         }
         return null;
+    }
+
+    @Singleton
+    @Provides
+    public static FirebaseDataHandler provideFirebaseDataHandler(@Nullable DeviceManager deviceManager,
+            @Nullable FirebaseRTDBManager firebaseDataManager) {
+        return new FirebaseDataHandler(deviceManager, firebaseDataManager);
     }
 
     @Singleton

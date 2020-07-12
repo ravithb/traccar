@@ -423,6 +423,17 @@ public final class Keys {
     public static final ConfigKey WEB_REQUEST_LOG_RETAIN_DAYS = new ConfigKey(
             "web.requestLog.retainDays", Integer.class);
 
+    /**
+     * Set the firebase service account keyfile path
+     */
+    public static final ConfigKey FIREBASE_SERVICE_ACCOUNT_KEY_FILE = new ConfigKey(
+            "firebase.service.account.keyfile", String.class);
+
+    /**
+     * Set the firebase url
+     */
+    public static final ConfigKey FIREBASE_URL = new ConfigKey("firebase.url", String.class);
+
     private Keys() {
     }
 

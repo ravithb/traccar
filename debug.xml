@@ -5,6 +5,8 @@
 <properties>
 
     <entry key='config.default'>./setup/default.xml</entry>
+    <entry key='firebase.url'>https://tracker-4ecd6.firebaseio.com/</entry>
+    <entry key='firebase.service.account.keyfile'>./setup/tracker-4ecd6-firebase-adminsdk-bb76i-f3b3461f29.json</entry>
 
     <entry key='web.path'>./traccar-web/web</entry>
     <entry key='web.debug'>true</entry>
